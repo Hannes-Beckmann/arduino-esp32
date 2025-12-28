@@ -40,38 +40,43 @@ static const uint8_t SYS_IRQ = 3;
 static const uint8_t LCD_CS = 17;
 static const uint8_t LCD_RS = 16;
 
-#if !defined(MAIN_ESP32_HAL_GPIO_H_) && defined(__cplusplus)
-/* address: 0x43/0x44 */
-class ExpanderPin {
+#if !defined(MAIN_ESP32_HAL_GPIO_H_) && defined(__cplusplus) /* && !defined(ARDUINO_CORE_BUILD) */
+
+#define ATTRIBUTE_ERROR __attribute__((error("Please include Arduino_Nesso_N1.h")))
+
+class ExpanderPinError {
 public:
-  ExpanderPin(uint16_t _pin) : pin(_pin & 0xFF), address(_pin & 0x100 ? 0x44 : 0x43){};
-  uint8_t pin;
-  uint8_t address;
+  ExpanderPinError(uint16_t p){};
 };
 
-class NessoBattery {
-public:
-  NessoBattery(){};
-  void enableCharge();        // enable charging
-  float getVoltage();         // get battery voltage in Volts
-  uint16_t getChargeLevel();  // get battery charge level in percents
-};
+void ATTRIBUTE_ERROR pinMode(ExpanderPinError pin, uint8_t mode);
+void ATTRIBUTE_ERROR digitalWrite(ExpanderPinError pin, uint8_t val);
+int ATTRIBUTE_ERROR digitalRead(ExpanderPinError pin);
 
-extern ExpanderPin LORA_LNA_ENABLE;
-extern ExpanderPin LORA_ANTENNA_SWITCH;
-extern ExpanderPin LORA_ENABLE;
-extern ExpanderPin POWEROFF;
-extern ExpanderPin GROVE_POWER_EN;
-extern ExpanderPin VIN_DETECT;
-extern ExpanderPin LCD_RESET;
-extern ExpanderPin LCD_BACKLIGHT;
-extern ExpanderPin LED_BUILTIN;
-extern ExpanderPin KEY1;
-extern ExpanderPin KEY2;
+extern ExpanderPinError _LORA_LNA_ENABLE;
+extern ExpanderPinError _LORA_ANTENNA_SWITCH;
+extern ExpanderPinError _LORA_ENABLE;
+extern ExpanderPinError _POWEROFF;
+extern ExpanderPinError _GROVE_POWER_EN;
+extern ExpanderPinError _VIN_DETECT;
+extern ExpanderPinError _LCD_RESET;
+extern ExpanderPinError _LCD_BACKLIGHT;
+extern ExpanderPinError _LED_BUILTIN;
+extern ExpanderPinError _KEY1;
+extern ExpanderPinError _KEY2;
 
-void pinMode(ExpanderPin pin, uint8_t mode);
-void digitalWrite(ExpanderPin pin, uint8_t val);
-int digitalRead(ExpanderPin pin);
+#define LORA_LNA_ENABLE     _LORA_LNA_ENABLE
+#define LORA_ANTENNA_SWITCH _LORA_ANTENNA_SWITCH
+#define LORA_ENABLE         _LORA_ENABLE
+#define POWEROFF            _POWEROFF
+#define GROVE_POWER_EN      _GROVE_POWER_EN
+#define VIN_DETECT          _VIN_DETECT
+#define LCD_RESET           _LCD_RESET
+#define LCD_BACKLIGHT       _LCD_BACKLIGHT
+#define LED_BUILTIN         _LED_BUILTIN
+#define KEY1                _KEY1
+#define KEY2                _KEY2
+
 #endif
 
 #endif /* Pins_Arduino_h */
